@@ -7,12 +7,14 @@ class NodeWithData(Node):
         super().__init__(key)
         self.firstWord = firstWord
         self.secondWord = secondWord 
-        self.trigs = {}
-       
-    def UpdateDict(self, thirdWord):
-        count = self.trigs.get(thirdWord, 0)
-        self.trigs[thirdWord] = count + 1
-                  
+        self.collDict = {concatination: {}}
+    def UpdateDict(self, firstWord, secondWord, thirdWord):
+        concatination = firstWord + secondWord
+        trigs = self.collDict.get(concatination, {})
+        count = trigs.get(thirdWord, 0)
+        trigs[thirdWord] = count + 1
+        self.collDict[concatination] = trigs
+         
     @staticmethod 
     def makeKey(firstWord, secondWord):
         concatination = firstWord + secondWord
