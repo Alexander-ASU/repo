@@ -23,11 +23,16 @@ class BinaryTreeSearch:
     def __init__(self, fileName):
          self.tree = BinaryTree()
          with open(fileName) as f:
-            flag = True
             for line in f:
+                flag = True
                 words = re.split(r'\W+|\d+|_+', line)                               
                 for i in range(len(words)):
-                   self.tree.add(NodeWithData(words[i], words[i+1]))
+                    if flag:
+                        self.tree.add(NodeWithData(words[i], words[i+1]))
+                        if i == max(len(words)):
+                            flag = False
+                            break
+                    self.tree.add(NodeWithData(words[i], words[i+1]))
 if __name__ == '__main__':
     test = NodeWithData('ONE','TWO')
     print(test)
