@@ -1,4 +1,5 @@
-﻿from binarytree import Node, BinaryTree
+﻿import re
+from binarytree import Node, BinaryTree
 #import hashlib
 class NodeWithData(Node):
     def __init__(self, firstWord, secondWord):
@@ -13,7 +14,9 @@ class NodeWithData(Node):
         trigs = self.collDict.get(concatination, {})
         count = trigs.get(thirdWord, 0)
         trigs[thirdWord] = count + 1
-        self.collDict[concatination] = trigs         
+        self.collDict[concatination] = trigs   
+    def __str__(self):
+        return str(self.key) + ' ' + str(self.collDict)   
     @staticmethod 
     def makeKey(firstWord, secondWord):
         concatination = firstWord + secondWord
@@ -24,15 +27,11 @@ class BinaryTreeSearch:
          self.tree = BinaryTree()
          with open(fileName) as f:
             for line in f:
-                flag = True
                 words = re.split(r'\W+|\d+|_+', line)                               
                 for i in range(len(words)):
-                    if flag:
-                        self.tree.add(NodeWithData(words[i], words[i+1]))
-                        if i == max(len(words)):
-                            flag = False
-                            break
                     self.tree.add(NodeWithData(words[i], words[i+1]))
+
 if __name__ == '__main__':
-    test = NodeWithData('ONE','TWO')
-    print(test)
+    test = BinaryTreeSearch('text.txt') 
+    #test = NodeWithData('ONE','TWO')
+    print(test);
