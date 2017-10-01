@@ -1,18 +1,25 @@
-﻿from binarytree import Node
+﻿import re
+from binarytree import Node, BinaryTree
 #import hashlib
 class NodeWithData(Node):
-    def __init__(self, firstWord, secondWord, fileName):
+    def __init__(self, firstWord, secondWord):
+        key = NodeWithData.makeKey(firstWord, secondWord)
+        super().__init__(key) 
         concatination = firstWord + secondWord
-        key = hash(concatination)
-        super().__init__(key)
-        self.firstWord = firstWord
-        self.secondWord = secondWord 
-        self.trigs = {}
-       
-    def UpdateDict(self, thirdWord):
-        count = self.trigs.get(thirdWord, 0)
-        self.trigs[thirdWord] = count + 1
-                  
+        self.collDict = {concatination: {}}
+    def UpdateDict(self, firstWord, secondWord, thirdWord):
+        concatination = firstWord + secondWord
+        trigs = self.collDict.get(concatination, {})
+        count = trigs.get(thirdWord, 0)
+        trigs[thirdWord] = count + 1
+        self.collDict[concatination] = trigs   
+    def GetTrigrams(self, firstWord, secondWord):
+        concatination = firstWord + secondWord
+        if concatination in self.collDict:
+            return list(self.collDict[concatination].keys())            
+        return [] 
+    def __str__(self):
+        return str(self.key) + ' ' + str(self.collDict)   
     @staticmethod 
     def makeKey(firstWord, secondWord):
         concatination = firstWord + secondWord
@@ -20,15 +27,44 @@ class NodeWithData(Node):
    
 class BinaryTreeSearch:
     def __init__(self, fileName):
+         self.tree = BinaryTree()
          with open(fileName) as f:
-            buffer = ''
+            flag = False
+            lastWord = ''
+            preLastWord = ''
             for line in f:
-                linewords = re.split(r'\W+|\d+|_+', line)
-                for i in range(linewords):
-                    node = twoWords[i] + twoWords[i + 1]
-                    if self.firstWord[:-1]: 
-                        buffer = self.firstWord
-                        break
+                words = re.split(r'\W+|\d+|_+', line)
+                words = list(filter(bool, words))
+                if flag:
+                    ferstWordOneLine = words[i + 1].lower()
+                    secondWordOneLine = words[i + 2].lower()
+                    node = self.tree.find(NodeWithData.makeKey(ferstWordOneLine, secondWordOneLine))
+                    # node.UpdateDict(ferstWordOneLine, secondWordOneLine, words[i+2].lower())
+                    flag = True                             
+                for i in range(len(words) - 2):                
+                    if i == len(words) - 3:
+                        oneWord = words[i + 1].lower()
+                        twoWord = words[i + 2].lower()
+                        node = self.tree.find(NodeWithData.makeKey(oneWord, twoWord))
+                    else:
+                        w1,w2 = words[i].lower(),words[i + 1].lower()
+                        node = self.tree.find(NodeWithData.makeKey(w1, w2))
+                        if node == None:
+                            node = NodeWithData(w1, w2)
+                            self.tree.add(node)
+                        node.UpdateDict(w1, w2, words[i+2].lower())
+    
+    def search(self, first, second):
+        first, second = first.lower(), second.lower()
+        key = NodeWithData.makeKey(first, second)
+        node = self.tree.find(key)
+        if node == None: return []
+        return node.GetTrigrams(first, second)  
+
 if __name__ == '__main__':
-    test = NodeWithData('ONE','TWO')
-    print(test)
+    #test = BinaryTreeSearch('text.txt')
+     
+    test1 = BinaryTreeSearch('text.txt')
+    test2 = test1.search('A', 'B')
+    #test = NodeWithData('ONE','TWO')
+    print(test2)

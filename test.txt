@@ -1,3 +1,8 @@
 bla bla
+<<<<<<< HEAD
 No eat, just think!HELLO WORLD!
 
+=======
+No eat, just think!
+HELLO WORLD!
+>>>>>>> parent of a457a03... delete information in test file
