@@ -29,19 +29,19 @@ class BinaryTreeSearch:
     def __init__(self, fileName):
          self.tree = BinaryTree()
          with open(fileName) as f:
-            flag = 0 
+            flag = False
+            lastWord = ''
+            preLastWord = ''
             for line in f:
                 words = re.split(r'\W+|\d+|_+', line)
                 words = list(filter(bool, words))
-                #if flag != 0:                              
-                for i in range(len(words) - 2):
-                    if flag == 0 and i == len(words) - 3:
-                        ferstWordOneLine = words[i + 1].lower()
-                        secondWordOneLine = words[i + 2].lower()
-                        node = self.tree.find(NodeWithData.makeKey(ferstWordOneLine, secondWordOneLine))
-                       # node.UpdateDict(ferstWordOneLine, secondWordOneLine, words[i+2].lower())
-                        flag = flag + 1 
-                        break
+                if flag:
+                    ferstWordOneLine = words[i + 1].lower()
+                    secondWordOneLine = words[i + 2].lower()
+                    node = self.tree.find(NodeWithData.makeKey(ferstWordOneLine, secondWordOneLine))
+                    # node.UpdateDict(ferstWordOneLine, secondWordOneLine, words[i+2].lower())
+                    flag = True                             
+                for i in range(len(words) - 2):                
                     if i == len(words) - 3:
                         oneWord = words[i + 1].lower()
                         twoWord = words[i + 2].lower()
