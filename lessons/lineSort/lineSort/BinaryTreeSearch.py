@@ -32,27 +32,47 @@ class BinaryTreeSearch:
             flag = False
             lastWord = ''
             preLastWord = ''
+            oneWordLineWord = ''
             for line in f:
                 words = re.split(r'\W+|\d+|_+', line)
                 words = list(filter(bool, words))
+                if len(words) == 0: continue
+                if oneWordLineWord != '':
+                    words.insert(0, oneWordLineWord)
+                    oneWordLineWord = ''
+                if len(words) == 1:
+                    oneWordLineWord = words[0].lower()
+                    continue
                 if flag:
-                    ferstWordOneLine = words[i + 1].lower()
-                    secondWordOneLine = words[i + 2].lower()
-                    node = self.tree.find(NodeWithData.makeKey(ferstWordOneLine, secondWordOneLine))
-                    # node.UpdateDict(ferstWordOneLine, secondWordOneLine, words[i+2].lower())
-                    flag = True                             
-                for i in range(len(words) - 2):                
-                    if i == len(words) - 3:
-                        oneWord = words[i + 1].lower()
-                        twoWord = words[i + 2].lower()
-                        node = self.tree.find(NodeWithData.makeKey(oneWord, twoWord))
-                    else:
-                        w1,w2 = words[i].lower(),words[i + 1].lower()
-                        node = self.tree.find(NodeWithData.makeKey(w1, w2))
-                        if node == None:
-                            node = NodeWithData(w1, w2)
-                            self.tree.add(node)
-                        node.UpdateDict(w1, w2, words[i+2].lower())
+                    #pre last first
+                    node = self.tree.find(NodeWithData.makeKey(preLastWord, lastWord))
+                    if node == None:
+                        node = NodeWithData(preLastWord, lastWord)
+                        self.tree.add(node)
+                    node.UpdateDict(preLastWord, lastWord, words[0].lower())
+                    #last first second
+                    node = self.tree.find(NodeWithData.makeKey(lastWord, words[0].lower()))
+                    if node == None:
+                        node = NodeWithData(lastWord, words[0].lower())
+                        self.tree.add(node)
+                    node.UpdateDict(lastWord, words[0].lower(), words[1].lower())
+                else: flag = True                             
+                lastWord = words[-1].lower()                      
+                preLastWord = words[-2].lower()
+                for i in range(len(words) - 2):
+                    w1 = words[i].lower()
+                    w2 = words[i + 1].lower()
+                    node = self.tree.find(NodeWithData.makeKey(w1, w2))
+                    if node == None:
+                        node = NodeWithData(w1, w2)
+                        self.tree.add(node)
+                    node.UpdateDict(w1, w2, words[i+2].lower())
+            if oneWordLineWord + preLastWord + lastWord != '':
+                node = self.tree.find(NodeWithData.makeKey(preLastWord, lastWord))
+                if node == None:
+                    node = NodeWithData(preLastWord, lastWord)
+                    self.tree.add(node)
+                node.UpdateDict(preLastWord, lastWord, oneWordLineWord)
     
     def search(self, first, second):
         first, second = first.lower(), second.lower()
@@ -62,9 +82,19 @@ class BinaryTreeSearch:
         return node.GetTrigrams(first, second)  
 
 if __name__ == '__main__':
-    #test = BinaryTreeSearch('text.txt')
-     
-    test1 = BinaryTreeSearch('text.txt')
-    test2 = test1.search('A', 'B')
-    #test = NodeWithData('ONE','TWO')
-    print(test2)
+    def test_searh_in_tree(tree, w1, w2):
+        print(w1, w2, '=', tree.search(w1, w2))
+    tree1 = BinaryTreeSearch('text.txt')
+    test_searh_in_tree(tree1, 'A', 'B')
+    test_searh_in_tree(tree1, 'B', 'C')
+    test_searh_in_tree(tree1, 'C', 'D')
+    test_searh_in_tree(tree1, 'D', 'A')
+    test_searh_in_tree(tree1, 'B', 'E')
+    test_searh_in_tree(tree1, 'E', 'D')
+    test_searh_in_tree(tree1, 'Z', 'F')
+    test_searh_in_tree(tree1, 'B', 'F')
+    test_searh_in_tree(tree1, 'F', 'A')
+    test_searh_in_tree(tree1, 'B', 'Z')
+    test_searh_in_tree(tree1, 'Z', 'E')
+    test_searh_in_tree(tree1, 'E', 'O')
+    pass

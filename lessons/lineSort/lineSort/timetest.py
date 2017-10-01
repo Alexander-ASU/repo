@@ -1,6 +1,7 @@
 ﻿import time
 from linearSearchOld import searchOld
 from LinearSearch import LinearSearch
+from BinaryTreeSearch import BinaryTreeSearch
 
 def mesuareCall(func, *args, **kwargs):
     acc = 0
@@ -12,8 +13,14 @@ def mesuareCall(func, *args, **kwargs):
     return acc / count
 
 if __name__ == '__main__':
-    #print('linearSearchOld ' + str(mesuareCall(searchOld, \
-    #    'The', 'Project', 'big.txt', count=3)) + ' s')
+    print('linearSearchOld ' + str(mesuareCall(searchOld, \
+        'The', 'Project', 'big.txt', count=3)) + ' s')
+    
     ls = LinearSearch('big.txt')
     print('linearSearch ' + str(mesuareCall(ls.search, \
         'The', 'Project')) + ' s')
+    
+    bts = BinaryTreeSearch('big.txt')
+    print('binaryTreeSearch ' + str(mesuareCall(bts.search, \
+        'The', 'Project')) + ' s')
+    pass

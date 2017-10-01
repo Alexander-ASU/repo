@@ -1,2 +1,12 @@
 A B C D
 A B E D
+
+A
+B
+F
+A
+B
+
+
+Z E
+O
