@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>fd24ffee-8b78-4bde-bce1-81c98d7476d5</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>cgi-bin\launcher.py</StartupFile>
+    <StartupFile>starter.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="cgi-bin\launcher.py" />
+    <Compile Include="cgi-bin\st05\boss.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cgi-bin\st05\company.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cgi-bin\st05\employee.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="cgi-bin\st05\main.py" />
     <Compile Include="starter.py">
       <SubType>Code</SubType>
